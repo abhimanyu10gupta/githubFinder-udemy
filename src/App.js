@@ -1,9 +1,11 @@
 import './App.css';
-import React, {Component} from 'react';
+import React, {Component, Fragment} from 'react';
 import Navbar from "./components/layout/navabr";
 import Users from "./components/users/Users";
 import Search from "./components/users/Search";
 import Alert from "./components/layout/Alert";
+import {BrowserRouter as Router, Route, Routes} from "react-router-dom";
+import About from "./components/pages/about";
 
 import axios from "axios";
 
@@ -32,21 +34,32 @@ class App extends Component {
     }
 
     render() {
-        const {users, loading} = this.state
+        const {users, loading, alert} = this.state
     return (
-        <div className="App">
-          <Navbar />
-          <div className={"container"}>
-              <Alert alert={this.state.alert} />
-              <Search searchUsers={this.searchUsers}
-                      clearUsers={this.clearUsers}
-                      showClear={this.state.users.length > 0}
-                      setAlert={this.setAlert}
-              />
-              <Users loading={loading} users={users}/>
-
-          </div>
-        </div>
+        <Router>
+            <div className="App">
+                <Navbar />
+                <div className={"container"}>
+                    <Alert alert={alert} />
+                    <Routes>
+                        <Route
+                            exact
+                            path={"/"}
+                            element={
+                            <Fragment>
+                                <Search searchUsers={this.searchUsers}
+                                        clearUsers={this.clearUsers}
+                                        showClear={users.length > 0}
+                                        setAlert={this.setAlert}
+                                />
+                                <Users loading={loading} users={users}/>
+                            </Fragment>
+                        }/>
+                        <Route exact path={"/about"} element={<About/>} />
+                    </Routes>
+                </div>
+            </div>
+        </Router>
     );
   }
 }
