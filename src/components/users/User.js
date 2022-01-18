@@ -3,14 +3,16 @@ import {useParams} from "react-router-dom";
 import Spinner from "../layout/Spinner";
 import PropTypes from 'prop-types';
 import {Link} from "react-router-dom";
+import Repos from "../repos/Repos";
 
 function User(props) {
     const params = useParams();
      useEffect(()=> {
          props.getUser(params.login).then();
+         props.getUserRepos(params.login).then();
      }, [])
      const {name, avatar_url,  location, bio, blog, login, html_url, followers, following, public_repos, public_gists, hireable, company} = props.user;
-     const {loading} = props;
+     const {loading, repos} = props;
      if(loading) {
          return <Spinner/>
      }
@@ -66,6 +68,7 @@ function User(props) {
                         Public Gists: {public_gists}
                     </div>
                 </div>
+                <Repos repos={repos} />
             </Fragment>
         )
 }
@@ -73,7 +76,9 @@ function User(props) {
 User.propTypes = {
     loading: PropTypes.bool.isRequired,
     user:PropTypes.object.isRequired,
-    getUser:PropTypes.func.isRequired
+    getUser:PropTypes.func.isRequired,
+    getUserRepos:PropTypes.func.isRequired,
+    repos: PropTypes.array.isRequired,
 }
 
 export default User
