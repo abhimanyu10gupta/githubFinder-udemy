@@ -5,14 +5,16 @@ import PropTypes from 'prop-types';
 import {Link} from "react-router-dom";
 import Repos from "../repos/Repos";
 
-function User(props) {
+const User = ({user, loading, login, getUser, getUserRepos, repos, match}) => {
+
     const params = useParams();
+
      useEffect(()=> {
-         props.getUser(params.login).then();
-         props.getUserRepos(params.login).then();
+         getUser(params.login).then();
+         getUserRepos(params.login).then();
      }, [])
-     const {name, avatar_url,  location, bio, blog, login, html_url, followers, following, public_repos, public_gists, hireable, company} = props.user;
-     const {loading, repos} = props;
+
+     const {name, avatar_url,  location, bio, blog, html_url, followers, following, public_repos, public_gists, hireable, company} = user;
      if(loading) {
          return <Spinner/>
      }
